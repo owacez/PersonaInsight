@@ -86,7 +86,3 @@ CREATE TABLE INSIGHTS (
 );
 
 ```
-
-## 📌 Future Enhancements
-- Multi-lingual input support
-- Downloadable/Printable emotion reports
