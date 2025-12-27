@@ -608,7 +608,7 @@ class PersonaInsight:
             if not url:
                 return jsonify({"error": "URL parameter is required"}), 400
 
-            if 'twitter.com' not in url:
+            if 'twitter.com' not in url and 'x.com' not in url:
                 return jsonify({"error": "Invalid Twitter URL"}), 400
 
             if count <= 0 or count > 100:
@@ -659,7 +659,7 @@ class PersonaInsight:
             if not username and not url:
                 return jsonify({"error": "Either username or url parameter is required"}), 400
 
-            if url and 'twitter.com' not in url:
+            if url and 'twitter.com' not in url and 'x.com' not in url:
                 return jsonify({"error": "Invalid Twitter URL"}), 400
 
             if count <= 0 or count > 100:
@@ -840,7 +840,7 @@ class PersonaInsight:
             if not username and not url:
                 return jsonify({"error": "Either username or url parameter is required"}), 400
 
-            if url and 'twitter.com' not in url:
+            if url and 'twitter.com' not in url and 'x.com' not in url:
                 return jsonify({"error": "Invalid Twitter URL"}), 400
 
             # Determine if we're using URL or username
