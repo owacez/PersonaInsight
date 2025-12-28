@@ -11,19 +11,27 @@ export default function Home() {
   const [loaderVisible, setLoaderVisible] = useState(false);
   const [error, setError] = useState("");
   const [url, setUrl] = useState("");
+  const [tweetCount, setTweetCount] = useState(0);
   const { token, user } = useContext(UserContext);
   const [analysis, setAnalysis] = useState(null);
-
+  const [realtimeProcessing, setRealtimeProcessing] = useState(false);
+  console.log(realtimeProcessing);
   async function req_search() {
     if (!url) {
       setError("Please check the input fields");
+      return;
+    }
+    if (tweetCount < 5) {
+      setError(
+        "Tweet count needs to be greater than or equal to 5 for better results."
+      );
       return;
     }
 
     try {
       setError("");
       setLoaderVisible(true);
-      const timeoutMs = 60000;
+      const timeoutMs = 1200000;
       if (url.endsWith(".com")) {
         setError("Please provide a twitter url with a username.");
         return;
@@ -32,7 +40,9 @@ export default function Home() {
         fetch(
           `http://127.0.0.1:5000/api/analyze_profile?url=${encodeURIComponent(
             url
-          )}&count=5&email=${encodeURIComponent(user.email)}`,
+          )}&count=${tweetCount}&email=${encodeURIComponent(
+            user.email
+          )}&realtimeProcessing=${realtimeProcessing}`,
           {
             method: "GET",
             headers: {
@@ -105,6 +115,8 @@ export default function Home() {
         </span>
       )}
       <Searchbar
+        setTweetCount={setTweetCount}
+        setRealtimeProcessing={setRealtimeProcessing}
         onChange={setUrl}
         onClick={req_search}
         disabled={loaderVisible}

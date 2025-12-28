@@ -80,7 +80,7 @@ header {
   transform: scale(1.1);
   transition: 0.7s;
 }
-.button-disabled {
+.disabled-element {
   opacity: 0.5;
 }
 .navigation-menu {
@@ -310,7 +310,7 @@ header {
   padding: 0 1rem;
   align-self: center;
   justify-self: center;
-  margin: 1rem 0 2rem 0;
+  margin: 1rem 1rem 2rem 0;
   font-size: 1.2rem;
   background-image: linear-gradient(
     to right,

@@ -1,7 +1,7 @@
 export default function Button({ text, onClick, disabled }) {
   return (
     <button
-      className={`button ${disabled ? "button-disabled" : ""}`}
+      className={`button ${disabled ? "disabled-element" : ""}`}
       onClick={onClick}
       disabled={disabled}
     >

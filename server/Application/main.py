@@ -643,6 +643,20 @@ class PersonaInsight:
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
+    def str_to_bool(self, value):
+        """
+        Convert string to boolean safely
+
+        Args:
+            value: String value to convert
+
+        Returns:
+            bool: True if value is 'true', '1', 'yes' (case insensitive), False otherwise
+        """
+        if value is None:
+            return False
+        return str(value).lower() == 'true'
+
     def analyze_profile(self):
         """
         Combined endpoint that scrapes tweets, performs personality analysis, and saves results to database
@@ -652,10 +666,20 @@ class PersonaInsight:
             # Get query parameters
             username = request.args.get('username', default=None, type=str)
             url = request.args.get('url', default=None, type=str)
-            count = request.args.get('count', default=20, type=int)
-            email = request.args.get('email', default=None, type=str)  # Email of the user saving the analysis
+            count = request.args.get('count', default=10, type=int)
+            email = request.args.get('email', default=None, type=str)
+
+            # FIXED: Properly parse boolean parameter using helper method
+            realtime_processing = self.str_to_bool(request.args.get('realtimeProcessing', 'false'))
 
             # Validate parameters
+
+            if url and 'twitter.com' not in url and 'x.com' not in url:
+                return jsonify({"error": "Invalid Twitter URL"}), 400
+
+            if count <= 0 or count > 100:
+                return jsonify({"error": "Count must be between 1 and 100"}), 400
+
             if not username and not url:
                 return jsonify({"error": "Either username or url parameter is required"}), 400
 
@@ -670,7 +694,7 @@ class PersonaInsight:
             identifier = url if is_url else username
 
             # Initialize scraper
-            scraper = TwitterScraper(headless=True)
+            scraper = TwitterScraper(headless=not realtime_processing)
 
             try:
                 # Scrape tweets
@@ -848,7 +872,7 @@ class PersonaInsight:
             identifier = url if is_url else username
 
             # Initialize scraper
-            scraper = TwitterScraper(headless=True)
+            scraper = TwitterScraper(headless=False)
 
             try:
                 # Scrape profile info
